@@ -16,9 +16,11 @@ import CreateEventForm from "./components/CreateEventForm"
 import EventDisplay from "./components/EventDisplay"
 import SignUpForm from "./components/SignUpForm"
 
+import WithSubnavigation from './components/Navbar';
 
 export const App = () => (
   <ChakraProvider theme={theme}>
+    <WithSubnavigation />
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/createEvent" element={<CreateEventForm />} />
