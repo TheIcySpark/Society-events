@@ -1,6 +1,18 @@
 import * as React from "react"
 
-import { Box, Button, ChakraProvider, Container, FormControl, FormLabel, Heading, Highlight, Image, Input, Spinner, Stack, theme, useBreakpointValue } from "@chakra-ui/react"
+import { 
+  Text, 
+  Button, 
+  ChakraProvider, 
+  Container, 
+  FormControl, 
+  FormLabel, 
+  Heading,
+  Input, 
+  Link as ChakraLink,
+  Stack, 
+  theme, 
+  useBreakpointValue} from "@chakra-ui/react"
 
 
 
@@ -11,27 +23,31 @@ export default function Login() {
       <Container centerContent py={{ base: '12', md: '24' }}>
         <Stack
           spacing={4}
-          w={{ base: 'full', md: 'md' }}
-          maxW={'md'}
+          w={{ base: 'full', md: 'full' }}
           rounded={'xl'}
           boxShadow={'lg'}
           p={{ base: 4, md: 8 }}
         >
           <Heading >
-            Society Events
+            Society Events - Login
           </Heading>
           <FormControl id="email">
-            <FormLabel>Email address</FormLabel>
+            <FormLabel>Email</FormLabel>
             <Input type="email" size={formSize} />
           </FormControl>
           <FormControl id="password">
-            <FormLabel>Password</FormLabel>
+            <FormLabel>Contraseña</FormLabel>
             <Input type="password" size={formSize} />
           </FormControl>
           <Stack spacing={6}>
             <Button colorScheme="blue" variant="solid">
-              Sign in
+              Login
             </Button>
+            <Text>
+              <ChakraLink as={ChakraLink} href="/signUp" color="blue.500">
+                Crear nueva cuenta
+              </ChakraLink>
+          </Text>
           </Stack>
         </Stack>
       </Container>
