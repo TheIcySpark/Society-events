@@ -12,12 +12,16 @@ import {
 import { ColorModeSwitcher } from "./ColorModeSwitcher"
 import Login from "./components/Login"
 import { Route, Router, Routes } from "react-router-dom"
+import CreateEventForm from "./components/CreateEventForm"
+import EventDisplay from "./components/EventDisplay"
 
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/createEvent" element={<CreateEventForm />} />
+      <Route path="/event" element={<EventDisplay />} />
     </Routes>
   </ChakraProvider>
 )
