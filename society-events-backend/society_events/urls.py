@@ -24,5 +24,6 @@ urlpatterns = [
     path('goodbye/', goodbye_world, name='goodbye-world'),
     # URLs para autenticación y generación de tokens JWT
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('Comment/', CommentView, name='Comment'),
     
 ]

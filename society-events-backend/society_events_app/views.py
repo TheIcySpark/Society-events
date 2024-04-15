@@ -12,6 +12,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import status
+from society_events_app.models import *
+from society_events_app.serializers import *
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -56,3 +59,18 @@ def get_links(request):
     }
 
     return Response(links)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])  # Asegura que el usuario esté autenticado
+def CommentView(request):
+    # Obtener el ID de usuario del token automáticamente
+    user_id = request.user.id
+
+    # Crear el evento utilizando el ID de usuario obtenido
+    event_data = {'user': user_id, 'title': request.data.get('title'), 'description': request.data.get('description')}
+    serializer = CommentSerializer(data=event_data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
