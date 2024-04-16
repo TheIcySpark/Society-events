@@ -15,7 +15,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
   return (
     <ChakraProvider>
       {/* Pasamos isLoggedIn al Navbar */}
-      <Navbar isLoggedIn={isLoggedIn} />
+      <Navbar />
       {/* Aquí va el contenido de tu landing page */}
       <Footer />
     </ChakraProvider>

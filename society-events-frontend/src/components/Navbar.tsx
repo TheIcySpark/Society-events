@@ -1,109 +1,115 @@
-import React from 'react';
-import {
-  Box,
-  Flex,
-  Avatar,
-  HStack,
-  Text,
-  IconButton,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-  useDisclosure,
-  useColorModeValue,
-  Stack,
-} from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { IconButton, Image, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, Text, Button, Stack, Collapse } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/react';
+import LogoImage from '../assets/images/logo.jpg'; // Importa la imagen del logo
+import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 
-interface NavbarProps {
-  isLoggedIn: boolean; // Propiedad para manejar la autenticación
-}
-
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
-  const Links = isLoggedIn ? ['Dashboard', 'Projects', 'Team'] : ['Home', 'About', 'Contact']; // Determina los enlaces basados en el estado de autenticación
-
-  const NavLink = ({ children }: { children: React.ReactNode }) => {
-    return (
-      <Box
-        as="a"
-        px={2}
-        py={1}
-        rounded={'md'}
-        _hover={{
-          textDecoration: 'none',
-          bg: useColorModeValue('gray.200', 'gray.700'),
-        }}
-        href={'#'}
-      >
-        {children}
-      </Box>
-    );
-  };
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+export default function WithSubnavigation() {
+  const { isOpen, onToggle } = useDisclosure();
+  const authToken = localStorage.getItem('authToken');
 
   return (
-    <>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-          <IconButton
-            size={'md'}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={'Open Menu'}
-            display={{ md: 'none' }}
-            onClick={isOpen ? onClose : onOpen}
+    <Box bg={useColorModeValue('#1f2c38', 'white')} py={{ base: 2 }} px={{ base: 4 }}>
+      <Flex
+        color={useColorModeValue('gray.600', 'white')}
+        minH={'60px'}
+        borderBottom={1}
+        borderStyle={'solid'}
+        borderColor={useColorModeValue('gray.200', 'gray.900')}
+        align={'center'}
+        justify={'space-between'}>
+        <Flex alignItems="center">
+          <Image
+            borderRadius="full"
+            boxSize="70px"
+            margin="5px"
+            src={LogoImage}
+            alt="Society Events Logo"
           />
-          <HStack spacing={8} alignItems={'center'}>
-            <Box>Logo</Box>
-            <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
-            </HStack>
-          </HStack>
-          <Flex alignItems={'center'}>
-            <Menu>
-              <MenuButton
-                as={Button}
-                rounded={'full'}
-                variant={'link'}
-                cursor={'pointer'}
-                minW={0}
-              >
-                <Avatar
-                  size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                  }
-                />
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
-                <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
-              </MenuList>
-            </Menu>
-          </Flex>
+          {authToken && (
+            <>
+              <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'#'} ml="15px">
+                HOME
+              </Button>
+              <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'#'}>
+                Contact US
+              </Button>
+            </>
+          )}
         </Flex>
 
-        {isOpen ? (
-          <Box pb={4} display={{ md: 'none' }}>
-            <Stack as={'nav'} spacing={4}>
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
-            </Stack>
-          </Box>
-        ) : null}
-      </Box>
+        <Stack direction={'row'} spacing={6} display={{ base: 'none', md: 'flex' }}>
+          <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'/login'} >
+            Login
+          </Button>
+          <Button
+            as={'a'}
+            fontSize={'sm'}
+            fontWeight={600}
+            color={'white'}
+            bg={'pink.400'}
+            href={'/signUp'} 
+            _hover={{
+              bg: 'pink.300',
+            }}>
+            Sign Up
+          </Button>
+          
+        </Stack>
 
-      <Box p={4}>Main Content Here</Box>
-    </>
+        <IconButton
+          display={{ base: 'flex', md: 'none' }}
+          onClick={onToggle}
+          icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+          aria-label={'Toggle Navigation'}
+        />
+      </Flex>
+
+      <Collapse in={isOpen} animateOpacity>
+        <MobileNav authToken={authToken} />
+      </Collapse>
+    </Box>
+  );
+}
+
+const MobileNav = ({ authToken }: { authToken: string | null }) => {
+  
+  return (
+    <Stack bg={useColorModeValue('white', 'gray.800')} p={4} display={{ md: 'none' }}>
+      {!authToken && ( // Mostrar los botones "Home" y "Contact Us" solo si no hay un token de autenticación
+        <>
+          <MobileNavItem label="HOME" href="#" />
+          <MobileNavItem label="Contact US" href="#" />
+        </>
+      )}
+      <MobileNavItem label="Login" href={'/login'} />
+      <MobileNavItem label="Sign Up" href={'/signUp'}  />
+      
+    </Stack>
   );
 };
 
-export default Navbar;
+const MobileNavItem = ({ label, href }: NavItem) => {
+  return (
+    <Stack spacing={4}>
+      <Box
+        py={2}
+        as="a"
+        href={href ?? '#'}
+        justifyContent="space-between"
+        alignItems="center"
+        _hover={{
+          textDecoration: 'none',
+        }}>
+        <Text fontWeight={600} color={useColorModeValue('gray.600', 'gray.200')}>
+          {label}
+        </Text>
+      </Box>
+    </Stack>
+  );
+};
+
+interface NavItem {
+  label: string;
+  href?: string;
+}
