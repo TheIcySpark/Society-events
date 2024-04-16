@@ -19,9 +19,6 @@ from society_events_app.views import *
 
 urlpatterns = [
     path('', home, name='home'),
-    path('links/', get_links, name='get-links'),
-    path('hello/', hello_world, name='hello-world'),
-    path('goodbye/', goodbye_world, name='goodbye-world'),
     # URLs para autenticación y generación de tokens JWT
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('Comment/', CommentView, name='Comment'),

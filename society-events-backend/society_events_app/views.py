@@ -35,42 +35,21 @@ def home(request):
     return Response(data)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def hello_world(request):
-    return Response({"message": "Hello, World!"})
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def goodbye_world(request):
-    return Response({"message": "Goodbye, World!"})
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_links(request):
-    # Obteniendo las URLs utilizando reverse_lazy
-    hello_url = reverse_lazy('hello-world')
-    goodbye_url = reverse_lazy('goodbye-world')
-
-    # Creando un diccionario con las URLs
-    links = {
-        "hello": str(request.build_absolute_uri(hello_url)),
-        "goodbye": str(request.build_absolute_uri(goodbye_url)),
-    }
-
-    return Response(links)
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])  # Asegura que el usuario esté autenticado
+@permission_classes([IsAuthenticated])
 def CommentView(request):
-    # Obtener el ID de usuario del token automáticamente
-    user_id = request.user.id
+    if request.method == 'POST':
+        # Convertimos el QueryDict a un diccionario mutable
+        mutable_data = request.data.copy()
+        # Obtenemos el ID de usuario del token JWT
+        user_id = request.user.id
+        # Añadimos el user_id al diccionario mutable
+        mutable_data['user_id'] = user_id
 
-    # Crear el evento utilizando el ID de usuario obtenido
-    event_data = {'user': user_id, 'title': request.data.get('title'), 'description': request.data.get('description')}
-    serializer = CommentSerializer(data=event_data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = CommentSerializer(data=mutable_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
