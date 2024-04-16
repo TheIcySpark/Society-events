@@ -22,5 +22,6 @@ urlpatterns = [
     # URLs para autenticación y generación de tokens JWT
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('Comment/', CommentView, name='Comment'),
+    path('CreateEvent/', create_event, name='CreateEvent'),
     
 ]

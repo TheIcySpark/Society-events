@@ -16,6 +16,7 @@ from rest_framework import status
 from society_events_app.models import *
 from society_events_app.serializers import *
 
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -23,9 +24,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         return token
 
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-
 
 
 @api_view(['GET'])
@@ -35,20 +36,41 @@ def home(request):
     return Response(data)
 
 
-
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def CommentView(request):
     if request.method == 'POST':
-        # Convertimos el QueryDict a un diccionario mutable
-        mutable_data = request.data.copy()
-        # Obtenemos el ID de usuario del token JWT
+        # Obtener el ID de usuario del token JWT
         user_id = request.user.id
-        # Añadimos el user_id al diccionario mutable
-        mutable_data['user_id'] = user_id
 
-        serializer = CommentSerializer(data=mutable_data)
+        # Crear un diccionario con los datos del request y agregar el user_id
+        data = {
+            'event': request.data.get('event'),  # Asegúrate de que 'event' esté presente en los datos del request
+            'user': user_id,
+            'text': request.data.get('text'),  # Asegúrate de que 'text' esté presente en los datos del request
+        }
+
+        serializer = CommentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_event(request):
+    if request.method == 'POST':
+        # Crear una copia mutable de request.data
+        mutable_data = request.data.copy()
+        
+        # Obtener el usuario actual a partir del token
+        creator = request.user
+
+        # Agregar el ID del creador al objeto de datos
+        mutable_data['creator'] = creator.id
+
+        serializer = EventSerializer(data=mutable_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
