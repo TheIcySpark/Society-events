@@ -23,5 +23,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('Comment/', CommentView, name='Comment'),
     path('CreateEvent/', create_event, name='CreateEvent'),
-    
+    path ('Commentlist/', comment_list, name='Commentlist'),
+    path ('Eventlist/', event_list, name='Eventlist'),
+    path ('EventDetail/<int:pk>/', event_detail, name='EventDetail'),
 ]

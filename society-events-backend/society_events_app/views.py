@@ -15,6 +15,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
 from society_events_app.models import *
 from society_events_app.serializers import *
+from django.shortcuts import get_object_or_404
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -45,9 +46,11 @@ def CommentView(request):
 
         # Crear un diccionario con los datos del request y agregar el user_id
         data = {
-            'event': request.data.get('event'),  # Asegúrate de que 'event' esté presente en los datos del request
+            # Asegúrate de que 'event' esté presente en los datos del request
+            'event': request.data.get('event'),
             'user': user_id,
-            'text': request.data.get('text'),  # Asegúrate de que 'text' esté presente en los datos del request
+            # Asegúrate de que 'text' esté presente en los datos del request
+            'text': request.data.get('text'),
         }
 
         serializer = CommentSerializer(data=data)
@@ -63,7 +66,7 @@ def create_event(request):
     if request.method == 'POST':
         # Crear una copia mutable de request.data
         mutable_data = request.data.copy()
-        
+
         # Obtener el usuario actual a partir del token
         creator = request.user
 
@@ -75,3 +78,28 @@ def create_event(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def comment_list(request):
+    if request.method == 'GET':
+        comments = Comment.objects.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def event_list(request):
+    if request.method == 'GET':
+        events = Event.objects.all()
+        serializer = EventViewSerializer(events, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def event_detail(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    serializer = EventSerializer(event)
+    return Response(serializer.data)

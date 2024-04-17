@@ -30,3 +30,8 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
+        
+class EventViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        exclude = ['participants', 'actual_participants', 'status']
