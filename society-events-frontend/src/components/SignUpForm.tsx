@@ -11,6 +11,7 @@ import {
   useToast,
   Text,
   Link as ChakraLink,
+  Box,
 } from '@chakra-ui/react';
 
 function SignUpForm() {
@@ -45,67 +46,72 @@ function SignUpForm() {
 
   return (
     <ChakraProvider>
-      <Container centerContent py={{ base: '12', md: '24' }}>
-        <Stack
-          spacing={4}
-          w={{ base: 'full', md: 'full' }}
-          rounded={'xl'}
-          boxShadow={'lg'}
-          p={{ base: 4, md: 8 }}
-        >
-          <Heading>Society Events - Crear cuenta </Heading>
-          <form onSubmit={handleSubmit}>
-            <FormControl id="username">
-              <FormLabel>Username</FormLabel>
-              <Input
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                size="md"
-              />
-            </FormControl>
-            <FormControl id="email">
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                size="md"
-              />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Contraseña</FormLabel>
-              <Input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                size="md"
-              />
-            </FormControl>
-            <FormControl id="confirmPassword">
-              <FormLabel>Confirmar contraseña</FormLabel>
-              <Input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                size="md"
-              />
-            </FormControl>
-            <Button colorScheme="blue" variant="solid" type="submit" mt={4} width="full">
-              Crear cuenta
-            </Button>
-            <Text>
-              <ChakraLink as={ChakraLink} href="/login" color="blue.500">
-                Login
-              </ChakraLink>
-          </Text>
-          </form>
-        </Stack>
-      </Container>
+      <Box bg="#050a11" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
+        <Container centerContent py={{ base: '12', md: '24' }}>
+          <Stack
+            spacing={4}
+            w={{ base: 'full', md: 'full' }}
+            rounded={'xl'}
+            boxShadow={'lg'}
+            p={{ base: 4, md: 8 }}
+            bg="white"
+          >
+            <Heading>Society Events - Create an Account </Heading>
+            <form onSubmit={handleSubmit}>
+              <FormControl id="username">
+                <FormLabel>Username</FormLabel>
+                <Input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  size="md"
+                />
+              </FormControl>
+              <FormControl id="email">
+                <FormLabel>Email</FormLabel>
+                <Input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  size="md"
+                />
+              </FormControl>
+              <FormControl id="password">
+                <FormLabel>Password</FormLabel>
+                <Input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  size="md"
+                />
+              </FormControl>
+              <FormControl id="confirmPassword">
+                <FormLabel>Confirm password</FormLabel>
+                <Input
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  size="md"
+                />
+              </FormControl>
+              <Stack spacing={6}>
+                <Button colorScheme="blue" variant="solid" type="submit" mt={4} width="full">
+                  Create an account
+                </Button>
+                <Text>
+                  <ChakraLink as={ChakraLink} href="/login" color="blue.500">
+                    Login
+                  </ChakraLink>
+                </Text>
+              </Stack>
+            </form>
+          </Stack>
+        </Container>
+      </Box>
     </ChakraProvider>
   );
 }
