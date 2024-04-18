@@ -18,31 +18,31 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 
-interface NavLinkProps {
-  children: React.ReactNode;
+interface NavbarProps {
+  isLoggedIn: boolean; // Propiedad para manejar la autenticación
 }
 
-const Links = ['Dashboard', 'Projects', 'Team'];
+const Navbar: React.FC<NavbarProps> = ({ isLoggedIn }) => {
+  const Links = isLoggedIn ? ['Dashboard', 'Projects', 'Team'] : ['Home', 'About', 'Contact']; // Determina los enlaces basados en el estado de autenticación
 
-const NavLink = ({ children }: NavLinkProps) => {
-  return (
-    <Box
-      as="a"
-      px={2}
-      py={1}
-      rounded={'md'}
-      _hover={{
-        textDecoration: 'none',
-        bg: useColorModeValue('gray.200', 'gray.700'),
-      }}
-      href={'#'}
-    >
-      {children}
-    </Box>
-  );
-};
+  const NavLink = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <Box
+        as="a"
+        px={2}
+        py={1}
+        rounded={'md'}
+        _hover={{
+          textDecoration: 'none',
+          bg: useColorModeValue('gray.200', 'gray.700'),
+        }}
+        href={'#'}
+      >
+        {children}
+      </Box>
+    );
+  };
 
-const Simple: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -106,4 +106,4 @@ const Simple: React.FC = () => {
   );
 };
 
-export default Simple;
+export default Navbar;

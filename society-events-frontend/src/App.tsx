@@ -15,13 +15,13 @@ import { Route, Router, Routes } from "react-router-dom"
 import CreateEventForm from "./components/CreateEventForm"
 import EventDisplay from "./components/EventDisplay"
 import SignUpForm from "./components/SignUpForm"
-
-import WithSubnavigation from './components/Navbar';
+import LandingPage from './components/LandingPage';
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <WithSubnavigation />
+    
     <Routes>
+    <Route path="/" element={<LandingPage isLoggedIn={false}/>} />
       <Route path="/login" element={<Login />} />
       <Route path="/createEvent" element={<CreateEventForm />} />
       <Route path="/event" element={<EventDisplay />} />

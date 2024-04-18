@@ -12,11 +12,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+<<<<<<< HEAD
 from rest_framework import status
 from society_events_app.models import *
 from society_events_app.serializers import *
 from django.shortcuts import get_object_or_404
 
+=======
+from rest_framework.views import APIView
+from rest_framework import status
+>>>>>>> 8d5849614e7b3d3408c7760f6482e4c7d5a1997b
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -99,7 +104,32 @@ def event_list(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+<<<<<<< HEAD
 def event_detail(request, pk):
     event = get_object_or_404(Event, pk=pk)
     serializer = EventSerializer(event)
     return Response(serializer.data)
+=======
+def get_links(request):
+    # Obteniendo las URLs utilizando reverse_lazy
+    hello_url = reverse_lazy('hello-world')
+    goodbye_url = reverse_lazy('goodbye-world')
+
+    # Creando un diccionario con las URLs
+    links = {
+        "hello": str(request.build_absolute_uri(hello_url)),
+        "goodbye": str(request.build_absolute_uri(goodbye_url)),
+    }
+
+    return Response(links)
+
+
+
+class CreateUserAPIView(APIView):
+    def post(self, request):
+        user_serializer = UserSerializer(data=request.data)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return Response(user_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+>>>>>>> 8d5849614e7b3d3408c7760f6482e4c7d5a1997b
