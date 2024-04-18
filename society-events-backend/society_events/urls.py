@@ -25,15 +25,12 @@ urlpatterns = [
     path('', home, name='home'),
     # URLs para autenticación y generación de tokens JWT
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-<<<<<<< HEAD
     path('Comment/', CommentView, name='Comment'),
     path('CreateEvent/', create_event, name='CreateEvent'),
     path ('Commentlist/', comment_list, name='Commentlist'),
     path ('Eventlist/', event_list, name='Eventlist'),
     path ('EventDetail/<int:pk>/', event_detail, name='EventDetail'),
-=======
     path('create-user/', CreateUserAPIView.as_view(), name='create-user'),
 
     path('accounts/', include('django.contrib.auth.urls')),
->>>>>>> 8d5849614e7b3d3408c7760f6482e4c7d5a1997b
 ]

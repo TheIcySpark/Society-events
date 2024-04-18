@@ -11,9 +11,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-<<<<<<< HEAD
         fields = ['id', 'username', 'email']
-=======
+
         fields = ['username', 'email', 'password']
 
     def validate_email(self, value):
@@ -36,7 +35,6 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
->>>>>>> 8d5849614e7b3d3408c7760f6482e4c7d5a1997b
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -49,7 +47,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Agrega más campos según sea necesario
 
         return token
-<<<<<<< HEAD
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -65,5 +62,3 @@ class EventViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         exclude = ['participants', 'actual_participants', 'status']
-=======
->>>>>>> 8d5849614e7b3d3408c7760f6482e4c7d5a1997b
