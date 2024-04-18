@@ -21,7 +21,7 @@ export const App = () => (
   <ChakraProvider theme={theme}>
     
     <Routes>
-    <Route path="/" element={<LandingPage isLoggedIn={false}/>} />
+    <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/createEvent" element={<CreateEventForm />} />
       <Route path="/event" element={<EventDisplay />} />

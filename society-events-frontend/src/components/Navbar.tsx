@@ -9,7 +9,7 @@ export default function WithSubnavigation() {
   const authToken = localStorage.getItem('authToken');
 
   return (
-    <Box bg={useColorModeValue('#1f2c38', 'white')} py={{ base: 2 }} px={{ base: 4 }}>
+    <Box bg={useColorModeValue('#003459', 'white')} py={{ base: 2 }} px={{ base: 4 }}>
       <Flex
         color={useColorModeValue('gray.600', 'white')}
         minH={'60px'}
@@ -39,18 +39,18 @@ export default function WithSubnavigation() {
         </Flex>
 
         <Stack direction={'row'} spacing={6} display={{ base: 'none', md: 'flex' }}>
-          <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'/login'} >
+          <Button as={'a'} fontSize={'md'} fontWeight={400} variant={'link'} href={'/login'} color={"white"}>
             Login
           </Button>
           <Button
             as={'a'}
-            fontSize={'sm'}
+            fontSize={'md'}
             fontWeight={600}
             color={'white'}
-            bg={'pink.400'}
+            bg={'#2A9D8F'}
             href={'/signUp'} 
             _hover={{
-              bg: 'pink.300',
+              bg: '#2A9D8F',
             }}>
             Sign Up
           </Button>
