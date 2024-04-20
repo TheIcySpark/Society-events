@@ -15,6 +15,8 @@ import {
   Link as ChakraLink,
   FormErrorMessage,
   Flex,
+  useBreakpointValue,
+  theme,
 } from '@chakra-ui/react';
 
 export default function Login() {
@@ -30,8 +32,9 @@ export default function Login() {
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    setPasswordError(validatePassword(e.target.value));
+    const value = e.target.value;
+    setPassword(value);
+    setPasswordError(validatePassword(value));
   };
 
   const toggleShowPassword = () => {
@@ -59,35 +62,25 @@ export default function Login() {
     if (!value.trim()) {
       return 'Password is required';
     }
-    if (value.length < 8) {
-      return 'Password must be at least 8 characters long';
-    }
-    if (!/[A-Z]/.test(value)) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!/\d/.test(value)) {
-      return 'Password must contain at least one number';
-    }
-    if (!/[!@#$%^&*]/.test(value)) {
-      return 'Password must contain at least one punctuation character (!@#$%^&*)';
-    }
     return '';
   };
 
+  const formSize = useBreakpointValue({ base: 'sm', md: 'md' });
+  
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Box bg="#050a11" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
-        <Container centerContent maxW="xl">
+        <Container centerContent py={{ base: '12', md: '24' }}>
           <form onSubmit={handleSubmit}>
             <Stack
-              spacing={8}
-              w="100%"
-              rounded="xl"
-              boxShadow="lg"
+              spacing={4}
+              w={{ base: 'full', md: 'full' }}
+              rounded={'xl'}
+              boxShadow={'lg'}
               p={{ base: 4, md: 8 }}
               bg="#A8DADC"
             >
-              <Heading size="lg">
+              <Heading alignContent="center">
                 Society Events - Login
               </Heading>
 

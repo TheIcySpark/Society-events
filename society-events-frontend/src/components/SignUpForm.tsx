@@ -48,16 +48,17 @@ function SignUpForm() {
     <ChakraProvider>
       <Box bg="#050a11" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
         <Container centerContent py={{ base: '12', md: '24' }}>
-          <Stack
-            spacing={4}
-            w={{ base: 'full', md: 'full' }}
-            rounded={'xl'}
-            boxShadow={'lg'}
-            p={{ base: 4, md: 8 }}
-            bg="white"
-          >
-            <Heading>Society Events - Create an Account </Heading>
-            <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
+            <Stack
+              spacing={4}
+              w={{ base: 'full', md: 'full' }}
+              rounded={'xl'}
+              boxShadow={'lg'}
+              p={{ base: 4, md: 8 }}
+              bg="#A8DADC"
+            >
+              <Heading>Society Events - Create an Account </Heading>
+
               <FormControl id="username">
                 <FormLabel>Username</FormLabel>
                 <Input
@@ -108,8 +109,9 @@ function SignUpForm() {
                   </ChakraLink>
                 </Text>
               </Stack>
-            </form>
-          </Stack>
+
+            </Stack>
+          </form>
         </Container>
       </Box>
     </ChakraProvider>
