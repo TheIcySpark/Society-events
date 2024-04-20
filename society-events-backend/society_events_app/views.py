@@ -18,6 +18,8 @@ from society_events_app.serializers import *
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import status
+from django.utils.dateparse import parse_datetime
+from django.utils.timezone import make_aware
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -62,17 +64,25 @@ def CommentView(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+#@permission_classes([IsAuthenticated])
 def create_event(request):
     if request.method == 'POST':
         # Crear una copia mutable de request.data
         mutable_data = request.data.copy()
 
-        # Obtener el usuario actual a partir del token
-        creator = request.user
+        # Formatea la fecha de inicio y finalización y muestra los datos recibidos
+        start_date = parse_datetime(mutable_data.get('start_date'))
+        end_date = parse_datetime(mutable_data.get('end_date'))
 
-        # Agregar el ID del creador al objeto de datos
-        mutable_data['creator'] = creator.id
+        # Convierte las fechas al formato deseado sin hacerlas "aware"
+        mutable_data['start_date'] = start_date.strftime('%Y-%m-%d %H:%M:%S')
+        mutable_data['end_date'] = end_date.strftime('%Y-%m-%d %H:%M:%S')
+
+        # Asigna el valor 'Gato' a creator
+        mutable_data['creator'] = 1
+
+        # Imprime los datos recibidos en la consola de Django
+        print('Datos recibidos:', mutable_data)
 
         serializer = EventSerializer(data=mutable_data)
         if serializer.is_valid():
@@ -104,18 +114,6 @@ def event_detail(request, pk):
     event = get_object_or_404(Event, pk=pk)
     serializer = EventSerializer(event)
     return Response(serializer.data)
-def get_links(request):
-    # Obteniendo las URLs utilizando reverse_lazy
-    hello_url = reverse_lazy('hello-world')
-    goodbye_url = reverse_lazy('goodbye-world')
-
-    # Creando un diccionario con las URLs
-    links = {
-        "hello": str(request.build_absolute_uri(hello_url)),
-        "goodbye": str(request.build_absolute_uri(goodbye_url)),
-    }
-
-    return Response(links)
 
 
 
