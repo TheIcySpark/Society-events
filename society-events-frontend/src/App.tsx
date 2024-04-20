@@ -14,7 +14,7 @@ import Login from "./components/Login"
 import { Route, Router, Routes } from "react-router-dom"
 import CreateEventForm from "./components/CreateEventForm"
 import EventDisplay from "./components/EventDisplay"
-import SignUpForm from "./components/SignUpForm"
+import SignUpForm from "./components/SignUp"
 import LandingPage from './components/LandingPage';
 
 export const App = () => (

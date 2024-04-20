@@ -80,7 +80,7 @@ export default function Login() {
               p={{ base: 4, md: 8 }}
               bg="#A8DADC"
             >
-              <Heading alignContent="center">
+              <Heading >
                 Society Events - Login
               </Heading>
 
