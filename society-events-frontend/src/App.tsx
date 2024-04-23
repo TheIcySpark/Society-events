@@ -16,16 +16,18 @@ import CreateEventForm from "./components/CreateEventForm"
 import EventDisplay from "./components/EventDisplay"
 import SignUpForm from "./components/SignUp"
 import LandingPage from './components/LandingPage';
+import HomePage from "./pages/HomePage"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     
     <Routes>
-    <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/createEvent" element={<CreateEventForm />} />
       <Route path="/event" element={<EventDisplay />} />
       <Route path="/signUp" element={<SignUpForm />} />
+      <Route path="/homePage" element={<HomePage />} />
     </Routes>
   </ChakraProvider>
 )
