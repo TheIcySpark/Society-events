@@ -17,6 +17,7 @@ import EventDisplay from "./components/EventDisplay"
 import SignUpForm from "./components/SignUp"
 import LandingPage from './components/LandingPage';
 
+
 export const App = () => (
   <ChakraProvider theme={theme}>
     
