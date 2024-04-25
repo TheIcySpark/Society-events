@@ -16,6 +16,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .serializers import *
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.exceptions import NotFound, PermissionDenied
+from society_events_app.models import Event
+from society_events_app.serializers import EventSerializer
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -59,21 +64,28 @@ def home(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def CommentView(request):
     if request.method == 'POST':
         data = {
-            'event': 2,
-            'user': 1,
+            'event': request.data.get('event'),
+            'user': request.data.get('user'),
             'text': request.data.get('text'),
         }
+        # Agregar este print para verificar los datos
+        print("Datos recibidos en CommentView:", data)
         serializer = CommentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # Agregar este print para ver los errores de validación
+            print("Errores de validación:", serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_event(request):
     if request.method == 'POST':
         mutable_data = request.data.copy()
@@ -90,14 +102,17 @@ def create_event(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def comment_list(request):
     if request.method == 'GET':
-        comments = Comment.objects.all()
+        event_id = request.GET.get('event_id')  # Obtener el ID del evento de la URL
+        comments = Comment.objects.filter(event_id=event_id)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def event_list(request):
     if request.method == 'GET':
         events = Event.objects.all()
@@ -107,10 +122,14 @@ def event_list(request):
 
 @api_view(['GET'])
 def event_detail(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    serializer = EventSerializer(event)
-    return Response(serializer.data)
-
+    try:
+        event = Event.objects.get(pk=pk)
+        serializer = EventSerializer(event)
+        return Response(serializer.data)
+    except Event.DoesNotExist:
+        raise NotFound("Event not found")
+    except Exception as e:
+        raise PermissionDenied(str(e))
 
 class CreateUserAPIView(APIView):
     def post(self, request):
