@@ -1,11 +1,12 @@
-import { Box, Button, Center, Flex, FormControl, FormLabel, Grid, Heading, Input, ResponsiveValue, Textarea, useBreakpointValue, useToast, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Grid, Heading, Input, ResponsiveValue, Textarea, useBreakpointValue, useToast, VStack } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
+import axios from 'axios'; // Importa Axios
 
 interface EventFormData {
   title: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  start_date: string; // Cambiado de startDate a start_date
+  end_date: string; // Cambiado de endDate a end_date
   location: string;
 }
 
@@ -13,8 +14,8 @@ export default function CreateEventForm() {
   const [formData, setFormData] = useState<EventFormData>({
     title: '',
     description: '',
-    startDate: '',
-    endDate: '',
+    start_date: '', // Cambiado de startDate a start_date
+    end_date: '', // Cambiado de endDate a end_date
     location: '',
   });
 
@@ -25,23 +26,49 @@ export default function CreateEventForm() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here, you would typically send your form data to a server or perform some other action.
-    toast({
-      title: 'Form submitted',
-      description: JSON.stringify(formData, null, 2),
-      status: 'success',
-      duration: 9000,
-      isClosable: true,
-    });
+  
+    try {
+      // Formatea las fechas correctamente antes de enviarlas
+      const formattedFormData = {
+        ...formData,
+        start_date: new Date(formData.start_date).toISOString(), // Formatea la fecha de inicio
+        end_date: new Date(formData.end_date).toISOString(), // Formatea la fecha de finalización
+      };
+  
+      // Envia los datos del formulario a tu API utilizando Axios
+      const response = await axios.post('http://127.0.0.1:8000/CreateEvent/', {
+        ...formattedFormData,
+        creator: 'Gato', // Asigna el valor 'Gato' a la variable creator
+      });
+  
+      // Aquí puedes manejar la respuesta de la API según tus necesidades
+      console.log(response.data);
+      toast({
+        title: 'Form submitted successfully',
+        description: 'Event created!',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch (error) {
+      // Maneja los errores de la API
+      console.error('Error submitting form:', error);
+      toast({
+        title: 'Error submitting form',
+        description: 'An error occurred while submitting the form. Please try again later.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
   };
-
-  // Get current date and time in YYYY-MM-DDTHH:MM format for the min attribute
+  
   const getCurrentDateTime = () => {
     const now = new Date();
     const year = now.getFullYear();
-    const month = (`0${now.getMonth() + 1}`).slice(-2); // month is 0-indexed
+    const month = (`0${now.getMonth() + 1}`).slice(-2);
     const day = (`0${now.getDate()}`).slice(-2);
     const hours = (`0${now.getHours()}`).slice(-2);
     const minutes = (`0${now.getMinutes()}`).slice(-2);
@@ -71,12 +98,12 @@ export default function CreateEventForm() {
           <VStack spacing={4} align="stretch">
             <Flex flexDirection={dateInputFlexDirection} gap={2}>
               <FormControl isRequired flex="1">
-                <FormLabel htmlFor='startDate'>Fecha de inicio</FormLabel>
-                <Input type='datetime-local' id='startDate' name='startDate' value={formData.startDate} onChange={handleChange} min={formData.startDate} />
+                <FormLabel htmlFor='start_date'>Fecha de inicio</FormLabel>
+                <Input type='datetime-local' id='start_date' name='start_date' value={formData.start_date} onChange={handleChange} min={getCurrentDateTime()} />
               </FormControl>
               <FormControl isRequired flex="1">
-                <FormLabel htmlFor='endDate'>Fecha de finalizacion</FormLabel>
-                <Input type='datetime-local' id='endDate' name='endDate' value={formData.endDate} onChange={handleChange} min={formData.startDate} />
+                <FormLabel htmlFor='end_date'>Fecha de finalizacion</FormLabel>
+                <Input type='datetime-local' id='end_date' name='end_date' value={formData.end_date} onChange={handleChange} min={formData.start_date} />
               </FormControl>
             </Flex>
             <FormControl isRequired>

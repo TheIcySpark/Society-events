@@ -18,6 +18,7 @@ import SignUpForm from "./components/SignUp"
 import LandingPage from './components/LandingPage';
 import HomePage from "./pages/HomePage"
 
+
 export const App = () => (
   <ChakraProvider theme={theme}>
     
