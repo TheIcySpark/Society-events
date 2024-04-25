@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   ChakraProvider,
@@ -17,6 +18,65 @@ import {
   Flex,
   useBreakpointValue,
   theme,
+} from "@chakra-ui/react";
+import axios from "axios";
+
+export default function Login() {
+  const [username, setUsername] = useState(""); // Estado para el username
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [usernameError, setUsernameError] = useState(""); // Estado para el error de username
+  const [passwordError, setPasswordError] = useState(""); // Estado para el error de password
+
+  const validateUsername = (value: string) => {
+    if (!value.trim()) {
+      return "Username is required";
+    }
+    return "";
+  };
+
+  const validatePassword = (value: string) => {
+    if (!value.trim()) {
+      return "Password is required";
+    }
+    return "";
+  };
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+    setUsernameError(validateUsername(e.target.value));
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setPasswordError(validatePassword(e.target.value));
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validateUsername(username) && !validatePassword(password)) {
+      try {
+        const response = await axios.post("http://127.0.0.1:8000/api/token/", {
+          username: username,
+          password: password,
+        });
+
+        // Guardar el token en el localStorage
+        localStorage.setItem("accessToken", response.data.access);
+
+        console.log("Token received:", response.data.access);
+        // Redireccionar a otra página o realizar otras acciones
+      } catch (error) {
+        console.error("Error logging in:", error);
+      }
+    }
+  };
+
+  const formSize = useBreakpointValue({ base: "sm", md: "md" });
 } from '@chakra-ui/react';
 
 export default function Login() {
@@ -84,16 +144,17 @@ export default function Login() {
                 Society Events - Login
               </Heading>
 
-              <FormControl isInvalid={!!emailError} isRequired>
-                <FormLabel>Email</FormLabel>
+              <FormControl isInvalid={!!usernameError} isRequired>
+                <FormLabel>Username</FormLabel>
                 <Input
-                  type="email"
-                  value={email}
-                  onChange={handleEmailChange}
+                  type="text"
+                  value={username}
+                  onChange={handleUsernameChange}
                   bg="white"
                   borderColor="black"
                 />
-                <FormErrorMessage>{emailError}</FormErrorMessage>
+                <FormErrorMessage>{usernameError}</FormErrorMessage>
+
               </FormControl>
 
               <FormControl isInvalid={!!passwordError} isRequired>
