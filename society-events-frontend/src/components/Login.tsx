@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState } from 'react';
 import {
   ChakraProvider,
   Box,
@@ -76,6 +77,56 @@ export default function Login() {
   };
 
   const formSize = useBreakpointValue({ base: "sm", md: "md" });
+} from '@chakra-ui/react';
+
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    setEmailError(validateEmail(e.target.value));
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPassword(value);
+    setPasswordError(validatePassword(value));
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validateEmail(email) && !validatePassword(password)) {
+      // Aquí puedes enviar los datos al backend o realizar otras acciones necesarias
+    }
+  };
+
+  const validateEmail = (value: string) => {
+    if (!value.trim()) {
+      return 'Email is required';
+    }
+    if (!value.includes('@')) {
+      return 'Email must contain @';
+    }
+    return '';
+  };
+
+  const validatePassword = (value: string) => {
+    if (!value.trim()) {
+      return 'Password is required';
+    }
+    return '';
+  };
+
+  const formSize = useBreakpointValue({ base: 'sm', md: 'md' });
+  
   return (
     <ChakraProvider theme={theme}>
       <Box bg="#050a11" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
@@ -103,6 +154,7 @@ export default function Login() {
                   borderColor="black"
                 />
                 <FormErrorMessage>{usernameError}</FormErrorMessage>
+
               </FormControl>
 
               <FormControl isInvalid={!!passwordError} isRequired>
