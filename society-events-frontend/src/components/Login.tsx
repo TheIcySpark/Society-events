@@ -21,26 +21,13 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 
+
 export default function Login() {
-  const [username, setUsername] = useState(""); // Estado para el username
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [usernameError, setUsernameError] = useState(""); // Estado para el error de username
-  const [passwordError, setPasswordError] = useState(""); // Estado para el error de password
-
-  const validateUsername = (value: string) => {
-    if (!value.trim()) {
-      return "Username is required";
-    }
-    return "";
-  };
-
-  const validatePassword = (value: string) => {
-    if (!value.trim()) {
-      return "Password is required";
-    }
-    return "";
-  };
+  const [usernameError, setUsernameError] = useState(''); // Estado para el error de username
+  const [passwordError, setPasswordError] = useState('');
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -76,46 +63,11 @@ export default function Login() {
     }
   };
 
-  const formSize = useBreakpointValue({ base: "sm", md: "md" });
-} from '@chakra-ui/react';
-
-export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    setEmailError(validateEmail(e.target.value));
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPassword(value);
-    setPasswordError(validatePassword(value));
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!validateEmail(email) && !validatePassword(password)) {
-      // Aquí puedes enviar los datos al backend o realizar otras acciones necesarias
-    }
-  };
-
-  const validateEmail = (value: string) => {
+  const validateUsername = (value: string) => {
     if (!value.trim()) {
-      return 'Email is required';
+      return "Username is required";
     }
-    if (!value.includes('@')) {
-      return 'Email must contain @';
-    }
-    return '';
+    return "";
   };
 
   const validatePassword = (value: string) => {
@@ -197,3 +149,7 @@ export default function Login() {
     </ChakraProvider>
   );
 }
+function setUsername(value: string) {
+  throw new Error('Function not implemented.');
+}
+
