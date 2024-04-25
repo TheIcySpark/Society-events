@@ -101,9 +101,15 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    # Incluye el nombre de usuario junto con el comentario
+    user = serializers.SerializerMethodField()
+
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['id', 'user', 'text', 'created_at']  # Incluye 'user' en los campos a serializar
+
+    def get_user(self, comment):
+        return comment.user.username if comment.user else None  # Devuelve el nombre de usuario o None si no hay usuario asociado
 
 
 class EventSerializer(serializers.ModelSerializer):
