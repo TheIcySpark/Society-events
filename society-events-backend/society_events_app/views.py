@@ -34,7 +34,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         return response
 
 
-
 def validate(self, attrs):
     username = attrs.get('username')
     password = attrs.get('password')
@@ -72,21 +71,27 @@ def home(request):
 @permission_classes([IsAuthenticated])
 def CommentView(request):
     if request.method == 'POST':
-        data = {
-            'event': request.data.get('event'),
-            'user': request.data.get('user'),
-            'text': request.data.get('text'),
-        }
-        # Agregar este print para verificar los datos
-        print("Datos recibidos en CommentView:", data)
-        serializer = CommentSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            # Agregar este print para ver los errores de validación
-            print("Errores de validación:", serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            # Imprimir los datos que se están recibiendo para depuración
+            print("Datos recibidos:", request.data)
+
+            data = {
+                'event_id': request.data.get('event'),
+                'user_id': request.user.id,  # Obtener el ID del usuario actual
+                'text': request.data.get('text'),
+            }
+            serializer = CommentSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()  # Esto guarda automáticamente el user_id correctamente
+                return Response(serializer.data, status=201)
+            else:
+                return Response(serializer.errors, status=400)
+        except ValidationError as ve:
+            # Manejar la excepción de validación de datos
+            return Response({'error': str(ve)}, status=400)
+        except Exception as e:
+            # Manejo de errores genérico para cualquier excepción
+            return Response({'error': str(e)}, status=500)
 
 
 @api_view(['POST'])

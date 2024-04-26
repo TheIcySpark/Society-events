@@ -65,7 +65,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'text', 'created_at']
+        fields = [ 'user', 'text', 'created_at']
 
     def get_user(self, comment):
         return comment.user.username if comment.user else None

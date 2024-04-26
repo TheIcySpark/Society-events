@@ -3,14 +3,12 @@ import axios from "axios";
 import {
   Box,
   Button,
-  Flex,
   FormControl,
   FormLabel,
   Grid,
   Heading,
   Text,
   Textarea,
-  useBreakpointValue,
   VStack,
 } from "@chakra-ui/react";
 
@@ -24,10 +22,9 @@ interface EventDetails {
 }
 
 interface Comment {
-  id: number;
   user: number;
   text: string;
-  date: string;
+  event: number; // Se ha agregado la propiedad 'event' a la interfaz Comment
 }
 
 export default function EventDisplay() {
@@ -64,8 +61,9 @@ export default function EventDisplay() {
       );
       const eventData = response.data;
 
-      // Convertir las fechas a objetos Date
-      const startDate = eventData.start_date ? new Date(eventData.start_date) : "";
+      const startDate = eventData.start_date
+        ? new Date(eventData.start_date)
+        : "";
       const endDate = eventData.end_date ? new Date(eventData.end_date) : "";
 
       setSelectedEvent({
@@ -74,7 +72,7 @@ export default function EventDisplay() {
         endDate,
       });
 
-      fetchComments(eventId); // Obtener comentarios después de los detalles del evento
+      fetchComments(eventId);
     } catch (error) {
       console.error("Error al obtener detalles del evento:", error);
     }
@@ -95,15 +93,21 @@ export default function EventDisplay() {
     if (newComment.trim() === "") return;
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/Comment/", {
+      const commentData: Comment = {
         text: newComment,
-        user: userId ? parseInt(userId) : null,
-        event: selectedEvent?.id ?? 0,
-      });
+        event: selectedEvent?.id ?? 0, // Se obtiene el ID del evento seleccionado
+        user: userId ? parseInt(userId) : 0,
+      };
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/Comment/",
+        commentData
+      );
       setComments((prevComments) => [...prevComments, response.data]);
       setNewComment("");
     } catch (error) {
-      console.error("Error al crear el comentario:", error);
+      console.error("Error al crear el comentario:", error); // Mostrar error en consola del navegador
+      // Aquí puedes agregar más acciones según sea necesario, como mostrar un mensaje al usuario
     }
   };
 
@@ -164,7 +168,6 @@ export default function EventDisplay() {
             <Box w="full" maxH="300px" overflowY="auto" borderWidth="1px" p={4}>
               {comments.map((comment) => (
                 <Box
-                  key={comment.id}
                   borderBottomWidth="1px"
                   borderBottomColor="gray.200"
                   py={2}
