@@ -28,7 +28,7 @@ export default function CreateEventForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     try {
       // Formatea las fechas correctamente antes de enviarlas
       const formattedFormData = {
@@ -36,13 +36,13 @@ export default function CreateEventForm() {
         start_date: new Date(formData.start_date).toISOString(), // Formatea la fecha de inicio
         end_date: new Date(formData.end_date).toISOString(), // Formatea la fecha de finalización
       };
-  
+
       // Envia los datos del formulario a tu API utilizando Axios
       const response = await axios.post('http://127.0.0.1:8000/CreateEvent/', {
         ...formattedFormData,
         creator: 'Gato', // Asigna el valor 'Gato' a la variable creator
       });
-  
+
       // Aquí puedes manejar la respuesta de la API según tus necesidades
       console.log(response.data);
       toast({
@@ -64,7 +64,7 @@ export default function CreateEventForm() {
       });
     }
   };
-  
+
   const getCurrentDateTime = () => {
     const now = new Date();
     const year = now.getFullYear();
@@ -79,7 +79,7 @@ export default function CreateEventForm() {
   const dateInputFlexDirection: ResponsiveValue<'row' | 'column' | undefined> = useBreakpointValue({ base: 'column', md: 'row' });
 
   return (
-    <Box p={4} m={4} borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box bg="#D4EEF3" p={4} m={4} borderWidth="1px" borderRadius="lg" overflow="hidden">
       <Heading as="h1" size="xl" textAlign="center" mb={6}>
         Crear evento
       </Heading>
@@ -88,31 +88,33 @@ export default function CreateEventForm() {
           <Box>
             <FormControl isRequired>
               <FormLabel htmlFor='title'>Titulo</FormLabel>
-              <Input id='title' name='title' value={formData.title} onChange={handleChange} />
+              <Input id='title' name='title' value={formData.title} onChange={handleChange} borderColor="black" bg="white" />
             </FormControl>
             <FormControl isRequired mt={4}>
               <FormLabel htmlFor='description'>Descripcion</FormLabel>
-              <Textarea id='description' name='description' value={formData.description} onChange={handleChange} />
+              <Textarea id='description' name='description' value={formData.description} onChange={handleChange} borderColor="black" bg="white" />
             </FormControl>
           </Box>
           <VStack spacing={4} align="stretch">
             <Flex flexDirection={dateInputFlexDirection} gap={2}>
               <FormControl isRequired flex="1">
                 <FormLabel htmlFor='start_date'>Fecha de inicio</FormLabel>
-                <Input type='datetime-local' id='start_date' name='start_date' value={formData.start_date} onChange={handleChange} min={getCurrentDateTime()} />
+                <Input type='datetime-local' id='start_date' name='start_date' value={formData.start_date} onChange={handleChange} min={getCurrentDateTime()} borderColor="black" bg="white" />
               </FormControl>
               <FormControl isRequired flex="1">
                 <FormLabel htmlFor='end_date'>Fecha de finalizacion</FormLabel>
-                <Input type='datetime-local' id='end_date' name='end_date' value={formData.end_date} onChange={handleChange} min={formData.start_date} />
+                <Input type='datetime-local' id='end_date' name='end_date' value={formData.end_date} onChange={handleChange} min={formData.start_date} borderColor="black" bg="white" />
               </FormControl>
             </Flex>
             <FormControl isRequired>
               <FormLabel htmlFor='location'>Location</FormLabel>
-              <Input id='location' name='location' value={formData.location} onChange={handleChange} />
+              <Input id='location' name='location' value={formData.location} onChange={handleChange} borderColor="black" bg="white" />
             </FormControl>
           </VStack>
         </Grid>
-        <Button type='submit' colorScheme='blue' mt={6}>Submit</Button>
+        <Flex justify="center">
+          <Button type='submit' colorScheme='blue' mt={6} width="200px" fontSize="lg">Submit</Button>
+        </Flex>
       </form>
     </Box>
   )
