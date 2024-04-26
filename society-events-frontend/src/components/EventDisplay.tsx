@@ -108,7 +108,7 @@ export default function EventDisplay() {
   };
 
   return (
-    <Box p={4} m={4} borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box bg="#D4EEF3"w="90%" minH="90vh" borderRadius="md" p={{ base: 4, md: 4 }}>
       <VStack spacing={4} mb={6}>
         <Heading as="h2" size="lg" textAlign="center">
           Event List
@@ -182,6 +182,7 @@ export default function EventDisplay() {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Add a new comment..."
+                borderColor="black" bg="white"
               />
             </FormControl>
             <Button onClick={postComment} colorScheme="blue">

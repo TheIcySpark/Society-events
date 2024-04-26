@@ -56,7 +56,7 @@ export default function Login() {
         console.log("Token received:", accessToken);
 
         // Redirigir a la vista de eventos después de iniciar sesión
-        window.location.href = "/event";
+        window.location.href = "/homePage";
       } catch (error) {
         console.error("Error:", error);
       }
