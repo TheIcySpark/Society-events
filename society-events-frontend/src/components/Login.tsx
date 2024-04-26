@@ -21,11 +21,11 @@ import {
 import axios from "axios";
 
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [usernameError, setUsernameError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [usernameError, setUsernameError] = useState(""); // Estado para el error de username
+  const [passwordError, setPasswordError] = useState("");
 
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -44,14 +44,14 @@ export default function Login() {
     if (!validateUsername(username) && !validatePassword(password)) {
       try {
         const response = await axios.post("http://127.0.0.1:8000/api/token/", {
-          username,
+          username, // Enviar username en lugar de email
           password,
         });
 
         const accessToken = response.data.access;
-        const userId = response.data.user_id;
+        const userId = response.data.user_id; // Suponiendo que el ID de usuario se envía como parte de la respuesta
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("userId", userId);
+        localStorage.setItem("userId", userId); // Asegúrate de usar el mismo nombre "userId" aquí
         console.log("Token received:", accessToken);
 
         // Redirigir a la vista de eventos después de iniciar sesión
@@ -62,13 +62,11 @@ export default function Login() {
     }
   };
 
+  // Comprobación del token en el localStorage al cargar la página
   useEffect(() => {
     const storedToken = localStorage.getItem("accessToken");
     if (storedToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
-    } else {
-      // Si no hay token almacenado, redirigir al login
-      window.location.href = "/login";
     }
   }, []);
 
@@ -81,13 +79,13 @@ export default function Login() {
 
   const validatePassword = (value: string) => {
     if (!value.trim()) {
-      return 'Password is required';
+      return "Password is required";
     }
-    return '';
+    return "";
   };
 
-  const formSize = useBreakpointValue({ base: 'sm', md: 'md' });
-  
+  const formSize = useBreakpointValue({ base: "sm", md: "md" });
+
   return (
     <ChakraProvider theme={theme}>
       <Box
@@ -165,4 +163,7 @@ export default function Login() {
       </Box>
     </ChakraProvider>
   );
+}
+function setUsername(value: string) {
+  throw new Error("Function not implemented.");
 }
