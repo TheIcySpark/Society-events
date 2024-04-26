@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Importa Axios para hacer solicitudes HTTP
 import {
   ChakraProvider,
   Box,
@@ -16,9 +15,12 @@ import {
   InputGroup,
   InputRightElement,
 } from '@chakra-ui/react';
+import axios from 'axios';
+
 
 function SignUpForm() {
   const toast = useToast();
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -28,8 +30,10 @@ function SignUpForm() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  // Agrega un nuevo estado para controlar si se debe mostrar la contraseña
   const [showPassword, setShowPassword] = useState(false);
 
+  // Define una función para alternar el estado de mostrar/ocultar contraseña
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -70,11 +74,29 @@ function SignUpForm() {
     if (validateEmail(formData.email) || validatePassword(formData.password)) {
       return;
     }
-//aqui se envia el formulario para el backend sac
+    //aqui se envia el formulario para el backend sac
     try {
       const response = await axios.post('http://127.0.0.1:8000/create-user/', formData); // Reemplaza 'URL_DEL_BACKEND' con la URL real de tu backend
       console.log(response.data); // Esto muestra la respuesta del backend en la consola
       // Aquí puedes agregar lógica para manejar la respuesta del backend, como redirigir al usuario o mostrar un mensaje de éxito
+      // Muestra la alerta de usuario creado exitosamente
+      toast({
+        title: 'User created successfully',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+
+      // Limpia el formulario
+      setFormData({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
+
+      // Redirige al usuario a la página de inicio de sesión
+      window.location.href = "/login";;
     } catch (error) {
       console.error('Error submitting form:', error);
       // Aquí puedes manejar errores de manera adecuada, como mostrar un mensaje de error al usuario
@@ -183,7 +205,7 @@ function SignUpForm() {
                     bg="white"
                     borderColor="black"
                   />
-                  
+
                   <InputRightElement width='4.5rem' height="100%">
                     <Button h='1.5rem' size='sm' onClick={toggleShowPassword}>
                       {showPassword ? 'Hide' : 'Show'}
