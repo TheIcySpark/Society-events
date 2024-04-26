@@ -3,6 +3,7 @@ import { Box, Button, Divider, Flex, Modal, ModalBody, ModalCloseButton, ModalCo
 import HeroImage from '../assets/images/hero.jpg'; // Importa la imagen del héroe
 import CreateEventForm from '../components/CreateEventForm';
 import EventDisplay from '../components/EventDisplay';
+import Footer from '../components/Footer';
 
 const HomePage: React.FC = () => {
   
@@ -14,6 +15,7 @@ const HomePage: React.FC = () => {
         <CreateEventForm ></CreateEventForm>
         <Divider  marginTop="10px" marginBottom="10px" ></Divider>
         <EventDisplay></EventDisplay>
+        <Footer/>
       </Box>
 
     </Flex>

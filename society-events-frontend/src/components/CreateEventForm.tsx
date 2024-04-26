@@ -98,7 +98,7 @@ export default function CreateEventForm() {
   const dateInputFlexDirection: ResponsiveValue<'row' | 'column' | undefined> = useBreakpointValue({ base: 'column', md: 'row' });
 
   return (
-    <Box bg="#D4EEF3" w="90%" h="35vh" borderRadius="md" p={{ base: 4, md: 4 }}>
+    <Box bg="#D4EEF3" w="90%" marginTop={"10px"} minH="35vh" borderRadius="md" p={{ base: 4, md: 4 }}>
       <Heading as="h1" size="xl" textAlign="center" mb={6}>
         Crear evento
       </Heading>

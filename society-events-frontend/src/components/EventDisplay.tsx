@@ -108,7 +108,7 @@ export default function EventDisplay() {
   };
 
   return (
-    <Box bg="#D4EEF3"w="90%" minH="90vh" borderRadius="md" p={{ base: 4, md: 4 }}>
+    <Box bg="#D4EEF3"w="90%" marginBottom={"10px"} minH="90vh" borderRadius="md" p={{ base: 4, md: 4 }}>
       <VStack spacing={4} mb={6}>
         <Heading as="h2" size="lg" textAlign="center">
           Event List
