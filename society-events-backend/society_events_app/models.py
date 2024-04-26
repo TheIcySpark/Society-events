@@ -12,7 +12,7 @@ class Event(models.Model):
     actual_participants = models.IntegerField(null=True, blank=True, default=None)
     status = models.CharField(max_length=20, default='Upcoming')  # Consider auto-updating this with signals
 
-    def _str_(self):
+    def __str__(self):
         return self.title
     
 class Comment(models.Model):
@@ -21,5 +21,5 @@ class Comment(models.Model):
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def _str_(self):
+    def __str__(self):
         return 'Comment by {} on {}'.format(self.user.username, self.event.title)

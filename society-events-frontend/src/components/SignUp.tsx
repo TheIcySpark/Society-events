@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Importa Axios para hacer solicitudes HTTP
 import {
   ChakraProvider,
   Box,
@@ -27,13 +28,11 @@ function SignUpForm() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-  // Agrega un nuevo estado para controlar si se debe mostrar la contraseña
-const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-// Define una función para alternar el estado de mostrar/ocultar contraseña
-const toggleShowPassword = () => {
-  setShowPassword(!showPassword);
-};
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -60,7 +59,7 @@ const toggleShowPassword = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       setConfirmPasswordError('Passwords do not match');
@@ -71,8 +70,15 @@ const toggleShowPassword = () => {
     if (validateEmail(formData.email) || validatePassword(formData.password)) {
       return;
     }
-    // Aquí puedes enviar los datos del formulario al servidor
-    console.log(formData);
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/create-user/', formData); // Reemplaza 'URL_DEL_BACKEND' con la URL real de tu backend
+      console.log(response.data); // Esto muestra la respuesta del backend en la consola
+      // Aquí puedes agregar lógica para manejar la respuesta del backend, como redirigir al usuario o mostrar un mensaje de éxito
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      // Aquí puedes manejar errores de manera adecuada, como mostrar un mensaje de error al usuario
+    }
   };
 
   const validateEmail = (value: string) => {
@@ -159,6 +165,7 @@ const toggleShowPassword = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   bg="white"
                   borderColor="black"
                 />
@@ -168,10 +175,11 @@ const toggleShowPassword = () => {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <Input
-                    type={showPassword ? 'text' : 'password'} // Cambia el tipo de entrada dinámicamente
+                    type={showPassword ? 'text' : 'password'}
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     bg="white"
                     borderColor="black"
                   />
@@ -191,6 +199,7 @@ const toggleShowPassword = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   bg="white"
                   borderColor="black"
                 />
