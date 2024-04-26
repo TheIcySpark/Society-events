@@ -76,7 +76,7 @@ const MobileNav = ({ authToken }: { authToken: string | null }) => {
   
   return (
     <Stack bg={useColorModeValue('white', 'gray.800')} p={4} display={{ md: 'none' }}>
-      {!authToken && ( // Mostrar los botones "Home" y "Contact Us" solo si no hay un token de autenticación
+      {authToken && ( // Mostrar los botones "Home" y "Contact Us" solo si no hay un token de autenticación
         <>
           <MobileNavItem label="HOME" href="#" />
           <MobileNavItem label="Contact US" href="#" />

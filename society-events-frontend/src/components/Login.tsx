@@ -21,17 +21,11 @@ import {
 import axios from "axios";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [decodedToken, setDecodedToken] = useState<any>(null); // Estado para almacenar el token decodificado
-
-  const validateUsername = (value: string) =>
-    !value.trim() ? "Username is required" : "";
-  const validatePassword = (value: string) =>
-    !value.trim() ? "Password is required" : "";
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -50,17 +44,16 @@ export default function Login() {
     if (!validateUsername(username) && !validatePassword(password)) {
       try {
         const response = await axios.post("http://127.0.0.1:8000/api/token/", {
-          username, // Enviar username en lugar de email
+          username,
           password,
         });
 
         const accessToken = response.data.access;
-        const userId = response.data.user_id; // Suponiendo que el ID de usuario se envía como parte de la respuesta
+        const userId = response.data.user_id;
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("userId", userId); // Asegúrate de usar el mismo nombre "userId" aquí
+        localStorage.setItem("userId", userId);
         console.log("Token received:", accessToken);
 
-        // Redirigir a la vista de eventos después de iniciar sesión
         window.location.href = "/event";
       } catch (error) {
         console.error("Error:", error);
@@ -68,25 +61,32 @@ export default function Login() {
     }
   };
 
-  // Comprobación del token en el localStorage al cargar la página
   useEffect(() => {
     const storedToken = localStorage.getItem("accessToken");
     if (storedToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
-      // Redirigir solo si no estamos en la página de inicio de sesión
-      if (window.location.pathname === "/login") {
-        window.location.href = "/event";
-      }
     } else {
-      // Si no hay token almacenado, redirigir al login solo si no estamos ya en la página de inicio de sesión
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
-      }
+      // Si no hay token almacenado, redirigir al login
+      window.location.href = "/login";
     }
   }, []);
 
-  const formSize = useBreakpointValue({ base: "sm", md: "md" });
+  const validateUsername = (value: string) => {
+    if (!value.trim()) {
+      return "Username is required";
+    }
+    return "";
+  };
 
+  const validatePassword = (value: string) => {
+    if (!value.trim()) {
+      return 'Password is required';
+    }
+    return '';
+  };
+
+  const formSize = useBreakpointValue({ base: 'sm', md: 'md' });
+  
   return (
     <ChakraProvider theme={theme}>
       <Box
