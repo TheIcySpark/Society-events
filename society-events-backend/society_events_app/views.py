@@ -99,12 +99,25 @@ def CommentView(request):
 def create_event(request):
     if request.method == 'POST':
         mutable_data = request.data.copy()
-        start_date = parse_datetime(mutable_data.get('start_date'))
-        end_date = parse_datetime(mutable_data.get('end_date'))
+        
+        start_date_str = mutable_data.get('start_date')
+        end_date_str = mutable_data.get('end_date')
+
+        if start_date_str and end_date_str:
+            try:
+                start_date = parse_datetime(start_date_str)
+                end_date = parse_datetime(end_date_str)
+            except ValueError:
+                return Response({'error': 'Invalid date format'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error': 'Start date and/or end date missing'}, status=status.HTTP_400_BAD_REQUEST)
+
         mutable_data['start_date'] = start_date.strftime('%Y-%m-%d %H:%M:%S')
         mutable_data['end_date'] = end_date.strftime('%Y-%m-%d %H:%M:%S')
+        
         # Aquí puedes establecer el ID del usuario creador
-        mutable_data['creator'] = 1
+        mutable_data['creator'] = request.user.id  # Utiliza el ID del usuario autenticado
+
         serializer = EventSerializer(data=mutable_data)
         if serializer.is_valid():
             serializer.save()

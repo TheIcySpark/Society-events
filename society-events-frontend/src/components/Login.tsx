@@ -20,12 +20,11 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 
-
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [usernameError, setUsernameError] = useState(''); // Estado para el error de username
+  const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,17 +44,16 @@ export default function Login() {
     if (!validateUsername(username) && !validatePassword(password)) {
       try {
         const response = await axios.post("http://127.0.0.1:8000/api/token/", {
-          username, // Enviar username en lugar de email
+          username,
           password,
         });
 
         const accessToken = response.data.access;
-        const userId = response.data.user_id; // Suponiendo que el ID de usuario se envía como parte de la respuesta
+        const userId = response.data.user_id;
         localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("userId", userId); // Asegúrate de usar el mismo nombre "userId" aquí
+        localStorage.setItem("userId", userId);
         console.log("Token received:", accessToken);
 
-        // Redirigir a la vista de eventos después de iniciar sesión
         window.location.href = "/event";
       } catch (error) {
         console.error("Error:", error);
@@ -63,11 +61,13 @@ export default function Login() {
     }
   };
 
-  // Comprobación del token en el localStorage al cargar la página
   useEffect(() => {
     const storedToken = localStorage.getItem("accessToken");
     if (storedToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
+    } else {
+      // Si no hay token almacenado, redirigir al login
+      window.location.href = "/login";
     }
   }, []);
 
@@ -165,7 +165,3 @@ export default function Login() {
     </ChakraProvider>
   );
 }
-function setUsername(value: string) {
-  throw new Error('Function not implemented.');
-}
-
