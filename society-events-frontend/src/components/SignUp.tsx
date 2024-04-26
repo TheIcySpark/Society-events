@@ -70,7 +70,7 @@ function SignUpForm() {
     if (validateEmail(formData.email) || validatePassword(formData.password)) {
       return;
     }
-
+//aqui se envia el formulario para el backend sac
     try {
       const response = await axios.post('http://127.0.0.1:8000/create-user/', formData); // Reemplaza 'URL_DEL_BACKEND' con la URL real de tu backend
       console.log(response.data); // Esto muestra la respuesta del backend en la consola
@@ -118,7 +118,7 @@ function SignUpForm() {
     setPasswordError('');
     return false;
   };
-
+//por aca sigue 
   const validateConfirmPassword = (value: string) => {
     if (!value.trim()) {
       setConfirmPasswordError('Confirm password is required');
