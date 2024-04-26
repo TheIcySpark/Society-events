@@ -73,9 +73,15 @@ export default function Login() {
     const storedToken = localStorage.getItem("accessToken");
     if (storedToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
+      // Redirigir solo si no estamos en la página de inicio de sesión
+      if (window.location.pathname === "/login") {
+        window.location.href = "/event";
+      }
     } else {
-      // Si no hay token almacenado, redirigir al login
-      window.location.href = "/login";
+      // Si no hay token almacenado, redirigir al login solo si no estamos ya en la página de inicio de sesión
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
     }
   }, []);
 
