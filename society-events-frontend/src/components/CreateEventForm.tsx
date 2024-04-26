@@ -46,10 +46,6 @@ export default function CreateEventForm() {
       const response = await axios.post('http://127.0.0.1:8000/CreateEvent/', {
         ...formattedFormData,
         creator: localStorage.getItem('userId'), // Agrega el ID del usuario al formulario
-      }, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
       });
 
       // Aquí puedes manejar la respuesta de la API según tus necesidades

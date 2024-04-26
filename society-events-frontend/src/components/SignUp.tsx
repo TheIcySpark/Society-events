@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Importa Axios para hacer solicitudes HTTP
 import {
   ChakraProvider,
   Box,
