@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormLabel, Grid, Heading, Input, ResponsiveValue, Textarea, useBreakpointValue, useToast, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Grid, Heading, Input, Textarea, VStack, useToast } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import axios from 'axios'; // Importa Axios
 
@@ -19,16 +19,11 @@ export default function CreateEventForm() {
     location: '',
   });
 
-  const toast = useToast();
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const toast = useToast(); // Utiliza useToast para obtener la función toast
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     try {
       // Formatea las fechas correctamente antes de enviarlas
       const formattedFormData = {
@@ -40,9 +35,13 @@ export default function CreateEventForm() {
       // Envia los datos del formulario a tu API utilizando Axios
       const response = await axios.post('http://127.0.0.1:8000/CreateEvent/', {
         ...formattedFormData,
-        creator: 'Gato', // Asigna el valor 'Gato' a la variable creator
+        creator: localStorage.getItem('userId'), // Agrega el ID del usuario al formulario
+      }, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
       });
-  
+
       // Aquí puedes manejar la respuesta de la API según tus necesidades
       console.log(response.data);
       toast({
@@ -64,7 +63,7 @@ export default function CreateEventForm() {
       });
     }
   };
-  
+
   const getCurrentDateTime = () => {
     const now = new Date();
     const year = now.getFullYear();
@@ -76,10 +75,8 @@ export default function CreateEventForm() {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
-  const dateInputFlexDirection: ResponsiveValue<'row' | 'column' | undefined> = useBreakpointValue({ base: 'column', md: 'row' });
-
   return (
-    <Box p={4} m={4} borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box bg="#D4EEF3" p={4} m={4} borderWidth="1px" borderRadius="lg" overflow="hidden">
       <Heading as="h1" size="xl" textAlign="center" mb={6}>
         Crear evento
       </Heading>
@@ -88,31 +85,28 @@ export default function CreateEventForm() {
           <Box>
             <FormControl isRequired>
               <FormLabel htmlFor='title'>Titulo</FormLabel>
-              <Input id='title' name='title' value={formData.title} onChange={handleChange} />
-            </FormControl>
-            <FormControl isRequired mt={4}>
-              <FormLabel htmlFor='description'>Descripcion</FormLabel>
-              <Textarea id='description' name='description' value={formData.description} onChange={handleChange} />
             </FormControl>
           </Box>
           <VStack spacing={4} align="stretch">
-            <Flex flexDirection={dateInputFlexDirection} gap={2}>
-              <FormControl isRequired flex="1">
+            <Flex flexDirection="column" gap={2}>
+              <FormControl isRequired>
                 <FormLabel htmlFor='start_date'>Fecha de inicio</FormLabel>
-                <Input type='datetime-local' id='start_date' name='start_date' value={formData.start_date} onChange={handleChange} min={getCurrentDateTime()} />
+
               </FormControl>
-              <FormControl isRequired flex="1">
+              <FormControl isRequired>
                 <FormLabel htmlFor='end_date'>Fecha de finalizacion</FormLabel>
-                <Input type='datetime-local' id='end_date' name='end_date' value={formData.end_date} onChange={handleChange} min={formData.start_date} />
+
               </FormControl>
             </Flex>
             <FormControl isRequired>
               <FormLabel htmlFor='location'>Location</FormLabel>
-              <Input id='location' name='location' value={formData.location} onChange={handleChange} />
+
             </FormControl>
           </VStack>
         </Grid>
-        <Button type='submit' colorScheme='blue' mt={6}>Submit</Button>
+        <Flex justify="center">
+          <Button type='submit' colorScheme='blue' mt={6} width="200px" fontSize="lg">Submit</Button>
+        </Flex>
       </form>
     </Box>
   )
