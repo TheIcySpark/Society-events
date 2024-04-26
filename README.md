@@ -59,7 +59,20 @@ The backend for this application is in a separate repository at the following UR
 
 ## Contribution
 
-Feel free to contribute to the development of this application! You can open issues to report bugs or feature requests, or submit pull requests with enhancements.
+### Planned Features
+
+We have an exciting roadmap ahead with planned features to enhance the functionality and user experience of our application. Here are some of the features we plan to implement in the future:
+
+1. **Edit Events**: Introduce the ability for users to edit events they have created, allowing for modifications such as updating event details or changing event dates.
+
+2. **History of Own Events**: Implement a feature that provides users with a history or log of events they have created or participated in, enhancing event management and tracking capabilities.
+
+3. **Event Filters**: Enhance the event browsing experience by adding filters based on categories, dates, locations, and other relevant criteria, making it easier for users to find events of interest.
+
+4. **Event Calendar**: Integrate a calendar view within the application that displays upcoming events, allows users to schedule new events, and provides a visual representation of event timelines.
+
+We welcome contributions from the community to help us realize these features and improve the overall functionality of our application. If you're interested in contributing, please refer to our [Contribution Guidelines](CONTRIBUTING.md) for detailed instructions.
+
 
 ## License
 
