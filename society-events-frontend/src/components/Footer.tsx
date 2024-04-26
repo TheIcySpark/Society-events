@@ -16,6 +16,7 @@ const Footer: React.FC = () => {
       padding="1rem"
       bg="#22333B"
       color="white"
+      w="100%"
     >
       <Box>
         <Text fontSize="lg">¡Join us to create positive change in the community!</Text>

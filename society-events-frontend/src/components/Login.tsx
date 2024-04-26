@@ -54,7 +54,8 @@ export default function Login() {
         localStorage.setItem("userId", userId);
         console.log("Token received:", accessToken);
 
-        window.location.href = "/event";
+        // Redirigir a la vista de eventos después de iniciar sesión
+        window.location.href = "/homePage";
       } catch (error) {
         console.error("Error:", error);
       }

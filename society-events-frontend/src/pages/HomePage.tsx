@@ -1,18 +1,21 @@
 import React from 'react';
-import { Box, Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import HeroImage from '../assets/images/hero.jpg'; // Importa la imagen del héroe
 import CreateEventForm from '../components/CreateEventForm';
+import EventDisplay from '../components/EventDisplay';
+import Footer from '../components/Footer';
 
 const HomePage: React.FC = () => {
   
   return (
     <Flex>
-      {/* División izquierda (oculta en dispositivos móviles) */}
-      <Box bg="#050a11" display={{ base: 'none', md: 'block' }} w={{ base: '0%', md: '25%' }} h="100vh"/>
       
       {/* División central */}
-      <Box bg="#050a33" w={{ base: '100%', md: '75%' }} overflowY="auto" h="100vh" >
-        <CreateEventForm></CreateEventForm>
+      <Box bg="#050a33" w={{ base: '100%', md: '100%' }} display="flex" flexDirection="column" alignItems="center" >
+        <CreateEventForm ></CreateEventForm>
+        <Divider  marginTop="10px" marginBottom="10px" ></Divider>
+        <EventDisplay></EventDisplay>
+        <Footer/>
       </Box>
 
     </Flex>

@@ -1,6 +1,7 @@
-import { Box, Button, Flex, FormControl, FormLabel, Grid, Heading, Input, Textarea, VStack, useToast } from "@chakra-ui/react";
-import { ChangeEvent, useState } from "react";
+import { Alert, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertIcon, Box, Button, Flex, FormControl, FormLabel, Grid, Heading, Input, ResponsiveValue, Textarea, useBreakpointValue, useToast, VStack } from "@chakra-ui/react";
+import { ChangeEvent, useRef, useState } from "react";
 import axios from 'axios'; // Importa Axios
+import React from "react";
 
 interface EventFormData {
   title: string;
@@ -19,11 +20,20 @@ export default function CreateEventForm() {
     location: '',
   });
 
-  const toast = useToast(); // Utiliza useToast para obtener la función toast
+  const [confirmacionAbierta, setConfirmacionAbierta] = useState(false);
+  const [eventoCreado, setEventoCreado] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = useRef<HTMLButtonElement | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const toast = useToast();
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
     try {
       // Formatea las fechas correctamente antes de enviarlas
       const formattedFormData = {
@@ -51,6 +61,18 @@ export default function CreateEventForm() {
         duration: 9000,
         isClosable: true,
       });
+
+      // Limpiar el formulario después de enviarlo con éxito
+      setFormData({
+        title: '',
+        description: '',
+        start_date: '',
+        end_date: '',
+        location: '',
+      });
+
+      // Establecer el estado de eventoCreado en true
+      setEventoCreado(true);
     } catch (error) {
       // Maneja los errores de la API
       console.error('Error submitting form:', error);
@@ -61,6 +83,8 @@ export default function CreateEventForm() {
         duration: 9000,
         isClosable: true,
       });
+    } finally {
+      onClose(); // Cerrar el modal de confirmación
     }
   };
 
@@ -76,7 +100,7 @@ export default function CreateEventForm() {
   };
 
   return (
-    <Box bg="#D4EEF3" p={4} m={4} borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box bg="#D4EEF3" w="90%" marginTop={"10px"} minH="35vh" borderRadius="md" p={{ base: 4, md: 4 }}>
       <Heading as="h1" size="xl" textAlign="center" mb={6}>
         Crear evento
       </Heading>
@@ -108,6 +132,42 @@ export default function CreateEventForm() {
           <Button type='submit' colorScheme='blue' mt={6} width="200px" fontSize="lg">Submit</Button>
         </Flex>
       </form>
+
+      {/* Confirmación modal */}
+      <AlertDialog
+        isOpen={confirmacionAbierta}
+        leastDestructiveRef={cancelRef}
+        onClose={() => setConfirmacionAbierta(false)}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Confirmar creación de evento
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              ¿Estás seguro de que deseas crear este evento?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={() => setConfirmacionAbierta(false)}>
+                Cancelar
+              </Button>
+              <Button colorScheme="blue" onClick={handleSubmit} ml={3}>
+                Confirmar
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      {/* Mostrar la alerta si el evento ha sido creado exitosamente */}
+      {eventoCreado && (
+        <Alert status="success" mt={4}>
+          <AlertIcon />
+          El evento se ha creado exitosamente.
+        </Alert>
+      )}
     </Box>
   )
 }
